@@ -17,7 +17,7 @@ public class GUI extends Application {
     Scene scene;
 
     Label countValue, minValue, maxValue, meanValue, medianValue, modeValue;
-    VBox valuesDisplay, graphDisplay, percentilesDisplay;
+    VBox valuesDisplay, graphDisplay, percentilesDisplay, errorsDisplay;
 
     public static void main(String[] args) {
         launch(args);
@@ -37,36 +37,35 @@ public class GUI extends Application {
         this.graphDisplay.setStyle("-fx-background-color: #c7ac92");
         this.percentilesDisplay = new VBox();
         this.percentilesDisplay.setStyle("-fx-background-color: #ece4b7");
+        this.errorsDisplay = new VBox();
 
         this.root = new VBox();
-        this.scene = new Scene(root, 1600, 900);
+        this.scene = new Scene(root, 1600, 900); // default dimensions
 
         this.root.setStyle("-fx-background-color: #ff0000");
 
-        primaryStage.setTitle("Grade Analyzer");
+        primaryStage.setTitle("Grade Analyzer"); // title of window
 
         HBox top = new HBox();
-        VBox left = new VBox();
-        VBox right = new VBox();
+        VBox topLeft = new VBox();
+        VBox topRight = new VBox();
         VBox bottom = new VBox();
-        VBox errorsDisplay = new VBox();
 
+        VBox.setVgrow(bottom, Priority.ALWAYS);  // bottom should expand to fill extra space
 
-        VBox.setVgrow(bottom, Priority.ALWAYS);
-
-        left.setStyle("-fx-background-color: #ece4b7");
-        right.setStyle("-fx-background-color: #c7ac92");
+        topLeft.setStyle("-fx-background-color: #ece4b7");
+        topRight.setStyle("-fx-background-color: #c7ac92");
         bottom.setStyle("-fx-background-color: #fcd581");
         errorsDisplay.setStyle("-fx-background-color: #c7ac92");
-        errorsDisplay.setMinHeight(100);
+        errorsDisplay.setMinHeight(100); // always leave some space for error log
 
-        initializeLeftArea(left);
-        initializeRightArea(right);
-        initializeBottomArea(bottom);
+        initializeLeftArea(topLeft);    // top left     - inputs
+        initializeRightArea(topRight);  // top right    - analyze options
+        initializeBottomArea(bottom);   // bottom area  - output
 
-        top.getChildren().addAll(left,right);
-        HBox.setHgrow(left, Priority.ALWAYS);
-        HBox.setHgrow(right, Priority.ALWAYS);
+        top.getChildren().addAll(topLeft,topRight);
+        HBox.setHgrow(topLeft, Priority.ALWAYS);    // share total width 50-50
+        HBox.setHgrow(topRight, Priority.ALWAYS);   // share total width 50-50
 
         root.getChildren().addAll(top,bottom,errorsDisplay);
 
@@ -101,7 +100,6 @@ public class GUI extends Application {
 
         modifyMe.getChildren().addAll(title, rangeRow, filenameRow, singleValueRow);
     }
-
     public void initializeRightArea(VBox modifyMe) {
         Label title;
         CheckBox outputMinCheckbox, outputMaxCheckbox, outputMeanCheckbox,
