@@ -1,4 +1,4 @@
-package com.utopple.code;
+package src;
 
 /**
  * Hello world!
