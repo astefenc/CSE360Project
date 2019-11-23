@@ -13,7 +13,7 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 
 public class GUI extends Application {
-    BorderPane root;
+    VBox root;
     Scene scene;
 
     Label countValue, minValue, maxValue, meanValue, medianValue, modeValue;
@@ -38,15 +38,21 @@ public class GUI extends Application {
         this.percentilesDisplay = new VBox();
         this.percentilesDisplay.setStyle("-fx-background-color: #ece4b7");
 
-        this.root = new BorderPane();
+        this.root = new VBox();
         this.scene = new Scene(root, 1600, 900);
+
+        this.root.setStyle("-fx-background-color: #ff0000");
 
         primaryStage.setTitle("Grade Analyzer");
 
+        HBox top = new HBox();
         VBox left = new VBox();
         VBox right = new VBox();
         VBox bottom = new VBox();
         VBox errorsDisplay = new VBox();
+
+
+        VBox.setVgrow(bottom, Priority.ALWAYS);
 
         left.setStyle("-fx-background-color: #ece4b7");
         right.setStyle("-fx-background-color: #c7ac92");
@@ -58,38 +64,14 @@ public class GUI extends Application {
         initializeRightArea(right);
         initializeBottomArea(bottom);
 
-        root.setBottom(bottom);
-        root.setLeft(left);
-        root.setRight(right);
+        top.getChildren().addAll(left,right);
+        HBox.setHgrow(left, Priority.ALWAYS);
+        HBox.setHgrow(right, Priority.ALWAYS);
+
+        root.getChildren().addAll(top,bottom,errorsDisplay);
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        left.setPrefHeight(primaryStage.getHeight() / 2);
-        left.setPrefWidth(primaryStage.getWidth() / 2);
-        right.setPrefHeight(primaryStage.getHeight() / 2);
-        right.setPrefWidth(primaryStage.getWidth() / 2);
-        bottom.setPrefHeight(primaryStage.getHeight() / 2);
-
-        // Keep elements height at proper percentages
-        scene.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-                ((Pane) (root.getChildren().get(0))).setPrefHeight(arg2.intValue() / 2);
-                ((Pane) (root.getChildren().get(1))).setPrefHeight(arg2.intValue() / 2);
-                ((Pane) (root.getChildren().get(2))).setPrefHeight(arg2.intValue() / 2);
-            }
-        });
-        // Keep elements width at proper percentages
-        scene.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-                ((Pane) (root.getChildren().get(0))).setPrefWidth(arg2.intValue() / 2);
-                ((Pane) (root.getChildren().get(1))).setPrefWidth(arg2.intValue() / 2);
-                ((Pane) (root.getChildren().get(2))).setPrefWidth(arg2.intValue());
-            }
-        });
-
     }
 
     public void initializeLeftArea(VBox modifyMe) {
