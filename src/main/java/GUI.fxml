@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" prefHeight="900" prefWidth="1600" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.Controller">
+<VBox alignment="CENTER" prefHeight="900" prefWidth="1600" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <HBox alignment="CENTER" prefWidth="800">
       <VBox alignment="TOP_CENTER" prefWidth="400" spacing="10" style="-fx-background-color: #ece4b7; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
          <opaqueInsets>
