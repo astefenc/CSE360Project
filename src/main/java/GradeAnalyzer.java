@@ -4,9 +4,12 @@ import java.util.List;
 
 public class GradeAnalyzer {
     List<Double> values;
+    double lowerBound, upperBound;
 
     GradeAnalyzer(){
         this.values = new LinkedList<Double>();
+        this.lowerBound = 0.0;
+        this.upperBound = 100.0;
     }
 
     int getAmount() throws RuntimeException{}
@@ -25,9 +28,33 @@ public class GradeAnalyzer {
         return this.values;
     }
 
-    List<Double> getGraph() throws RuntimeException{}
+    List<Double> getGraph() throws RuntimeException{
+        //WIP - Robert
+        List<Double> graphData = new LinkedList<>();
+        int binSize, bin, dataIndex;
+
+        for(int i=0; i<12; i++){
+            graphData.set(i,0.0);
+        }
+
+
+
+
+
+        for(int i=0; i<this.values.size(); i++){
+            bin = (int)(this.values.get(i)/10.0);
+            dataIndex = bin+2;
+
+            graphData.set(dataIndex, graphData.get(dataIndex)+1);
+
+        }
+    }
 
     List<Double> getPercentiles() throws RuntimeException{}
+
+    void setLowerBound(double value){} // needed so we can throw error if entered/loaded is outside range
+
+    void setUpperBound(double value){} // needed so we can throw error if entered/loaded is outside range
 
     void loadFile(File file) throws RuntimeException{}
 
