@@ -30,7 +30,6 @@ public class GradeAnalyzer {
     List<Double> getValues() throws RuntimeException{
         return this.values;
     }
-*/
 
     /*
         Returns a 10 bin wide histogram depicting the data
