@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class GradeAnalyzer {
@@ -28,19 +29,61 @@ public class GradeAnalyzer {
     }
 
     double getMean() throws RuntimeException{
-        return 3;
+        Iterator<Double> iter = values.iterator();
+        double total = values.getFirst();
+
+        while(iter.hasNext()){
+            total += iter.next();
+        }
+
+        return (total/values.size());
     }
 
     double getMedian() throws RuntimeException{
-        return 4;
+        LinkedList<Double> copyOfValues = new LinkedList<>(values);
+        Collections.sort(copyOfValues);
+        Iterator<Double> quickIter = copyOfValues.iterator();
+        Iterator<Double> slowIter = copyOfValues.iterator();
+        Iterator<Double> previousIter = copyOfValues.iterator();
+
+        while(quickIter.hasNext()) { // quick iter moves at double the speed of slow iter so when it
+            quickIter.next();    // reaches the end of the linkedlist, slow iter is in the middle
+            if(quickIter.hasNext()) {
+                quickIter.next();
+
+                previousIter = slowIter;
+                slowIter.next();
+            }
+        }
+
+        if(!quickIter.equals(null)) { //if quick iter isn't null, the list has an odd size.
+            return previousIter.next();
+        }else{
+            return ( previousIter.next() + slowIter.next() )/2.0;
+        }
     }
 
     LinkedList<Double> getMode() throws RuntimeException{
-        LinkedList<Double> li = new LinkedList<>();
-        li.add(4.4);
-        li.add(12.32);
+        LinkedList<Double> modes = new LinkedList<Double>();
 
-        return li;
+        int mostFreq = 0;
+        for(Double value: this.values) {
+            int freq = Collections.frequency(values, value);
+            if(freq == mostFreq) {
+                modes.add(value);
+            }
+            if(freq > mostFreq) {
+                modes.clear();
+                modes.add(value);
+                mostFreq = freq;
+            }
+        }
+
+        if(modes.equals(null)) {
+            throw new RuntimeException("There is no mode.");
+        }else {
+            return modes;
+        }
     }
 
 
@@ -119,23 +162,79 @@ public class GradeAnalyzer {
         return graphData;
     }
 
-    // TODO
     LinkedList<Double> getPercentiles() throws RuntimeException{
-        LinkedList<Double> li = new LinkedList<>();
-        li.add(1.11);
-        li.add(2.22);
-        li.add(3.33);
-        li.add(4.44);
-        li.add(5.55);
-        li.add(6.66);
-        li.add(7.77);
-        li.add(8.88);
-        li.add(9.99);
-        li.add(10.10);
+        LinkedList<Double> sortedScores = new LinkedList<>(values);
+        Collections.sort(sortedScores);
+        LinkedList<Double> percentGroups = new LinkedList<Double>();
+        int sizeOfColumns = sortedScores.size()/10;
 
-        return li;
-    }
+        // initialize arrayList
+        for(int i=0; i<10; i++){
+            percentGroups.add(0.0);
+        }
 
+        for(int i = 0; i<10; i++){
+            for(int j = 0; j<sizeOfColumns; j++){
+                percentGroups.set(i, percentGroups.get(i) + sortedScores.pop());
+            }
+        }
+        /*
+        int[] arr;
+        arr = new int[10];  // array to keep track of the number of values in each range
+        int totalCount;
+
+        //double binSize;
+
+        // initialize arrayList
+        for(int i=0; i<10; i++){
+            percentGraph.add(0.0);
+        }
+        */
+        // count up amount of total value in each range
+        // also: keep track of how many values are in each range
+        /*
+        for (Double value : this.values) {
+            if(value<10){
+                percentGraph.set(0, percentGraph.get(0) + value);
+                arr[0] += 1;
+            }else if(value<20){
+                percentGraph.set(1, percentGraph.get(1) + value);
+                arr[1] += 1;
+            }else if(value<30){
+                percentGraph.set(2, percentGraph.get(2) + value);
+                arr[2] += 1;
+            }else if(value<40){
+                percentGraph.set(3, percentGraph.get(3) + value);
+                arr[3] += 1;
+            }else if(value<50){
+                percentGraph.set(4, percentGraph.get(4) + value);
+                arr[4] += 1;
+            }else if(value<60){
+                percentGraph.set(5, percentGraph.get(5) + value);
+                arr[5] += 1;
+            }else if(value<70){
+                percentGraph.set(6, percentGraph.get(6) + value);
+                arr[6] += 1;
+            }else if(value<80){
+                percentGraph.set(7, percentGraph.get(7) + value);
+                arr[7] += 1;
+            }else if(value<90){
+                percentGraph.set(8, percentGraph.get(8) + value);
+                arr[8] += 1;
+            }else{
+                percentGraph.set(9, percentGraph.get(9) + value);
+                arr[9] += 1;
+            }
+        }
+        */
+        // Get average for each index instead of the percentgraph
+        for(int i=0; i<10; i++){
+                percentGroups.set(i, (percentGroups.get(i)/ sizeOfColumns));
+        }
+
+
+        return percentGroups; // results in 10 different ranges of percentages
+  }
 
 
     /**
