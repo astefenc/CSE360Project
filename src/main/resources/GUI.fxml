@@ -36,11 +36,11 @@
 
 <VBox alignment="CENTER" prefHeight="900" prefWidth="1600" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <HBox alignment="CENTER" prefWidth="800">
-      <VBox alignment="TOP_CENTER" prefWidth="400" spacing="10" style="-fx-background-color: #ece4b7; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+      <VBox alignment="TOP_CENTER" prefWidth="400" spacing="10" style="-fx-background-color: #999999; -fx-padding: 10px;-fx-border-color:black; -fx-border-width: 3; -fx-border-style: solid;" HBox.hgrow="ALWAYS">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
-         <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-padding: 5px;" text="Input" textAlignment="CENTER">
+         <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-padding: 5px;-fx-underline: true" text="Input" textAlignment="CENTER">
             <font>
                <Font name="System Bold" size="20.0" />
             </font>
@@ -70,8 +70,8 @@
          </HBox>
          <Region opacity="0.0" prefWidth="138.0" VBox.vgrow="ALWAYS" />
       </VBox>
-      <VBox alignment="TOP_CENTER" prefWidth="400" spacing="20" style="-fx-background-color: #c7ac92; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
-         <Label alignment="CENTER" text="Analyze" textAlignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefWidth="400" spacing="20" style="-fx-background-color: #999999; -fx-padding: 10px;-fx-border-color:black; -fx-border-width: 3; -fx-border-style: solid;" HBox.hgrow="ALWAYS">
+         <Label alignment="CENTER" text="Analyze" textAlignment="CENTER" style="-fx-underline: true">
             <font>
                <Font name="System Bold" size="20.0" />
             </font>
@@ -102,15 +102,15 @@
          <Insets />
       </opaqueInsets>
    </HBox>
-   <VBox alignment="TOP_CENTER" spacing="10" style="-fx-background-color: #fcd581; -fx-padding: 10px;" VBox.vgrow="ALWAYS">
-      <Label alignment="CENTER" text="Output" textAlignment="CENTER">
+   <VBox alignment="TOP_CENTER" spacing="10" style="-fx-background-color: #999999; -fx-padding: 10px;" VBox.vgrow="ALWAYS">
+      <Label alignment="CENTER" text="Output" textAlignment="CENTER" style="-fx-underline: true">
          <font>
             <Font name="System Bold" size="20.0" />
          </font></Label>
       <HBox>
          <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10"
-               style="-fx-padding: 5px; -fx-background-color: #ece4b7;" HBox.hgrow="ALWAYS">
-            <Label text="Details">
+               style="-fx-padding: 5px; -fx-background-color: #FFFFCC;-fx-border-color:black; -fx-border-width: 2; -fx-border-style: solid;" HBox.hgrow="ALWAYS">
+            <Label style="-fx-underline: true" text="Details">
                <font>
                   <Font size="16.0"/>
                </font>
@@ -140,8 +140,8 @@
                <Label fx:id="modeValue"/>
             </HBox>
          </VBox>
-         <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10" style="-fx-padding: 5px;">
-            <Label text="Values">
+         <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10" style="-fx-padding: 5px;-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
+            <Label text="Values" style="-fx-underline: true">
                <font>
                   <Font size="16.0"/>
                </font>
@@ -151,7 +151,7 @@
             </ScrollPane>
          </VBox>
          <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10"
-               style="-fx-padding: 5px; -fx-background-color: #c7ac92;" HBox.hgrow="ALWAYS">
+               style="-fx-padding: 5px; -fx-background-color: #999999;-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" HBox.hgrow="ALWAYS">
             <Label text="Distribution">
                <font>
                   <Font size="16.0"/>
@@ -160,8 +160,8 @@
             <HBox fx:id="graphPane"/>
          </VBox>
          <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10"
-               style="-fx-padding: 5px; -fx-background-color: #ece4b7;" HBox.hgrow="ALWAYS">
-            <Label text="Percentiles">
+               style="-fx-padding: 5px; -fx-background-color: #FFFFCC;-fx-border-color:black; -fx-border-width: 2; -fx-border-style: solid;" HBox.hgrow="ALWAYS">
+            <Label text="Percentiles" style="-fx-underline: true">
                <font>
                   <Font size="16.0"/>
                </font>
