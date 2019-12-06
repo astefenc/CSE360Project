@@ -32,5 +32,5 @@ public class GUI extends Application {
 }
 
 /*
-    /home/general/jdk-13/bin/java --module-path /home/general/javafx-sdk-11.0.2/lib --add-modules=javafx.controls -Dfile.encoding=UTF-8 @/tmp/cp_9hq8wixwmz81os68n0z4x0h2o.argfile src.GUI
+    --module-path /home/general/javafx-sdk-11.0.2/lib --add-modules=javafx.controls,javafx.graphics,javafx.fxml,javafx.base
 */

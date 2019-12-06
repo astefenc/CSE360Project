@@ -1,0 +1,67 @@
+What would you like to do?
+SET_BOUNDARIES [lower] [upper]: Set upper and lower boundaries
+LOAD_FILE [filepath]: Load file, overwrite dataset
+APPEND_FILE [filepath]: Append file data to dataset
+ADD_VALUE [value]: Add one value to dataset
+DELETE_VALUE [value]: Delete single value from dataset
+CLEAR: Clear dateset
+SET_COUNT [0/1]: Change count state
+SET_MINIMUM [0/1]: Change minimum state
+SET_MAXIMUM [0/1]: Change maximum state
+SET_MEAN [0/1]: Change mean state
+SET_MEDIAN [0/1]: Change median state
+SET_MODE [0/1]: Change mode state
+SET_PERCENTILES [0/1]: Change percentiles state
+SET_VALUES [0/1]: Change values display state
+SET_GRAPH [0/1]: Change graph state
+CREATE_REPORT [filepath]: Make a report of session
+ANALYZE: Analyze dataset
+EXIT: Leave program
+
+Input value(s) out of range.
+Input value(s) out of range.
+Data point is of the wrong data type. Please enter an integer or decimal value.
+Show amount: 20
+Show minimum value: 5.000
+Show maximum value: 100.000
+Show mean: 52.050
+Show median: 52.500
+Show Mode(s): 5.000, 20.000
+Show values:
+5.0        20.0        46.0        65.0        85.0
+5.0        30.0        50.0        70.0        90.0
+15.0        35.0        55.0        75.0        95.0
+20.0        40.0        60.0        80.0        100.0
+
+Show graph:
+0.00
+      XXXXXXXXXX
+10.00
+      XXXXXXXXXXXXXXX
+20.00
+      XXXXX
+30.00
+      XXXXXXXXXX
+40.00
+      XXXXXXXXXX
+50.00
+      XXXXXXXXXX
+60.00
+      XXXXXXXXXX
+70.00
+      XXXXXXXXXX
+80.00
+      XXXXXXXXXX
+90.00
+      XXXXXXXXXX
+100.00
+The average grade for the 0% to 10% range is 5.00
+The average grade for the 10% to 20% range is 17.50
+The average grade for the 20% to 30% range is 25.00
+The average grade for the 30% to 40% range is 37.50
+The average grade for the 40% to 50% range is 48.00
+The average grade for the 50% to 60% range is 57.50
+The average grade for the 60% to 70% range is 67.50
+The average grade for the 70% to 80% range is 77.50
+The average grade for the 80% to 90% range is 87.50
+The average grade for the 90% to 100% range is 97.50

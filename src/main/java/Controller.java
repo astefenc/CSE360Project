@@ -1,11 +1,3 @@
-/*
- * @author  Robert Nordman
- *          ASUID: 1215721572
- *          Class: Arizona State University CSE360 - #70641
- *          Assignment #: Group Project - Grade Analyzer
- *
- */
-
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -193,6 +185,7 @@ public class Controller {
             this.errorDisplayWrapper.setMinHeight(0);
             this.errorDisplayWrapper.setPrefHeight(0);
             this.errorDisplayWrapper.setMaxHeight(0);
+            this.errorState = false;
 
             // load file
             gradeAnalyzer.loadFile(this.filepathField.getText());
@@ -217,6 +210,7 @@ public class Controller {
             this.errorDisplayWrapper.setMinHeight(0);
             this.errorDisplayWrapper.setPrefHeight(0);
             this.errorDisplayWrapper.setMaxHeight(0);
+            this.errorState = false;
 
             // load file
             gradeAnalyzer.loadFile(this.filepathField.getText());
