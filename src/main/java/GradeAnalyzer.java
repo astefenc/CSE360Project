@@ -42,28 +42,21 @@ public class GradeAnalyzer {
     double getMedian() throws RuntimeException{
         LinkedList<Double> copyOfValues = new LinkedList<>(values);
         Collections.sort(copyOfValues);
-        Iterator<Double> quickIter = copyOfValues.iterator();
-        Iterator<Double> slowIter = copyOfValues.iterator();
-        Iterator<Double> previousIter = copyOfValues.iterator();
-        boolean even = true;
 
-        while(quickIter.hasNext()) { // quick iter moves at double the speed of slow iter so when it
-            quickIter.next();    // reaches the end of the linkedlist, slow iter is in the middle
-            if(quickIter.hasNext()) {
-                quickIter.next();
-
-                previousIter = slowIter;
-                slowIter.next();
-            } else {
-                even = false;
-            }
+        while(copyOfValues.size() > 2)
+        {
+            copyOfValues.removeFirst();
+            copyOfValues.removeLast();
         }
 
-        if(even) { // the list has an even size.
-            return ( previousIter.next() + slowIter.next() )/2.0;
-        }else{
-            return previousIter.next();
+        if(copyOfValues.size() == 2)
+        {
+            return copyOfValues.getMean();
         }
+        else {
+            return copyOfValues.getValue(0);
+        }
+
     }
 
     LinkedList<Double> getMode() throws RuntimeException{
