@@ -15,10 +15,6 @@ public class GradeAnalyzer {
         this.upperBound = 100.0;
     }
 
-    void setValues(LinkedList<Double> _values) {
-        values = _values;
-    }
-
     int getAmount() {
         return values.size();
     }
@@ -200,6 +196,8 @@ public class GradeAnalyzer {
     private void readFromTxt(BufferedReader bufferedReader) throws RuntimeException, IOException{
         String line;
         int lineNum;
+        double value;
+        LinkedList<Double> alreadyAdded = new LinkedList<>();
 
         lineNum = 0;
 
@@ -208,10 +206,18 @@ public class GradeAnalyzer {
             lineNum++; // increment line counter
 
             try {
-                this.addValue(Double.parseDouble(line));    // add each value line-by-line
+                value = Double.parseDouble(line);
+                this.addValue(value);    // add each value line-by-line
+                alreadyAdded.add(value);
             }catch (NumberFormatException e){ // wrong data type
+                for(double d : alreadyAdded){
+                    this.deleteValue(d);
+                }
                 throw new RuntimeException("Data point is of the wrong data type. Please enter an integer or decimal value. (Value "+line+" on line "+lineNum+" is the wrong data type)");
             } catch (RuntimeException e){   // other exception
+                for(double d : alreadyAdded){
+                    this.deleteValue(d);
+                }
                 if(e.getMessage().contains("out of range")){
                     throw new RuntimeException("Input value(s) out of range.  (Value "+line+" on line "+lineNum+" is out of range)");   // out of range - add line info
                 }else{
@@ -234,6 +240,8 @@ public class GradeAnalyzer {
         String line,delimiter;
         int lineNum;
         String[] lineSplit;
+        double value;
+        LinkedList<Double> alreadyAdded = new LinkedList<>();
 
         delimiter = ",";
         lineNum = 0;
@@ -244,13 +252,20 @@ public class GradeAnalyzer {
 
             lineSplit = line.split(delimiter);
 
-            for (String s : lineSplit) {
+            for(int i=0; i<lineSplit.length; i++){
                 try {
-                    this.addValue(Double.parseDouble(s));    // add each value
-
+                    value = Double.parseDouble(lineSplit[i]);
+                    this.addValue(value);    // add each value line-by-line
+                    alreadyAdded.add(value);
                 } catch (NumberFormatException e) { // wrong data type
+                    for(double d : alreadyAdded){
+                        this.deleteValue(d);
+                    }
                     throw new RuntimeException("Data point is of the wrong data type. Please enter an integer or decimal value. (Value "+line+" on line "+lineNum+" is the wrong data type)");
                 } catch (RuntimeException e){
+                    for(double d : alreadyAdded){
+                        this.deleteValue(d);
+                    }
                     if(e.getMessage().contains("out of range")){
                         throw new RuntimeException("Input value(s) out of range.  (Value "+line+" on line "+lineNum+" is out of range)");   // out of range - add line info
                     }else{

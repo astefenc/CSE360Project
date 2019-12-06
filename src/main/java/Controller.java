@@ -33,7 +33,7 @@ import java.util.List;
  * <p>
  * This controller is responsible for reacting to any button presses.
  * Additionally it reads input from the textboxes and other input fields
- *      and alters it's out depending on these values.
+ *      and alters it's outputs depending on these values.
  * Also, it keeps track of every action performed so that it can make a log file
  *      if required.
  * Lastly, it is responsible for handling all Exceptions thrown at any stage,
@@ -77,6 +77,7 @@ public class Controller {
     private boolean boundariesLocked;
     private LinkedList<String> recordOfActions;
     private VBox axis,graphical;
+    private boolean errorState;
 
 
     /**
@@ -90,6 +91,7 @@ public class Controller {
         gradeAnalyzer = new GradeAnalyzer();
         recordOfActions = new LinkedList<>();
         boundariesLocked = false;
+        errorState = false;
 
 
         /*
@@ -131,6 +133,9 @@ public class Controller {
         for(int i=0; i<10; i++){
             percentileVBox.getChildren().add(new Label());
         }
+
+
+        recordAction("GradeAnalyzer begun.\n");
     }
 
     /**
@@ -143,22 +148,20 @@ public class Controller {
         valueMaxField.setDisable(false);
         // Clear existing data
         gradeAnalyzer.clearValues();
+        showNothing();
+        errorState = false;
 
-        // clear everything now that there are no values
-        displayGraph();
-        displayValues();
-        displayPercentiles();
-        amountValue.setText("0");
-        minValue.setText("Minimum not calculated");
-        maxValue.setText("Maximum not calculated");
-        meanValue.setText("Mean not calculated");
-        medianValue.setText("Median not calculated");
-        modeValue.setText("Mode not calculated");
 
         boundariesLocked = false;
+        recordAction("Clear current dataset.\n");
     }
 
 
+    /**
+     * Allow user to select file to load data from
+     * <p>
+     * Opens a standard file explorer to allow user to select file to load dataset from
+     * */
     @FXML
     public void selectFileExplorer() {
         File file;
@@ -171,6 +174,12 @@ public class Controller {
 
         this.filepathField.setText(file.toString()); // change text field to reflect selected file
     }
+     /**
+      * Load file in file input textbox
+      * <p>
+      * Loads the set file.  Handles any errors in loading.
+      * Overwrite current dataset.
+      * */
     @FXML
     public void loadFile(){
         this.reset();
@@ -194,8 +203,15 @@ public class Controller {
         }
 
     }
+     /**
+      * Load file in file input textbox
+      * <p>
+      * Loads the set file.  Handles any errors in loading.
+      * Adds to current dataset.
+      * */
     @FXML
     public void appendFile(){
+        showNothing();
         try {
             // hide error display
             this.errorDisplayWrapper.setMinHeight(0);
@@ -205,11 +221,18 @@ public class Controller {
             // load file
             gradeAnalyzer.loadFile(this.filepathField.getText());
             recordAction(String.format("Append file: %s\n",this.filepathField.getText()));
+            errorState = false;
         } catch (Exception e){
             recordAction(String.format("Fail append file: %s\n",this.filepathField.getText()));
             showError(e);  // show any exceptions that occur
         }
     }
+     /**
+      * Add a single value to the dataset
+      * <p>
+      * Adds to single value to the current dataset.
+      * Handles any errors in adding it.
+      * */
     @FXML
     public void addValue(){
         if(!boundariesLocked){
@@ -219,6 +242,7 @@ public class Controller {
         try {
             gradeAnalyzer.addValue(Double.parseDouble(singleValueField.getText())); // add this one value
             recordAction(String.format("Add data value: %s\n",singleValueField.getText()));
+            errorState=false;
         } catch (NumberFormatException e) { // wrong data type
             recordAction(String.format("Fail add data value: %s\n",singleValueField.getText()));
             showError(new RuntimeException("Data point is of the wrong data type. Please enter an integer or decimal value.")); // if it isn't a number
@@ -227,11 +251,25 @@ public class Controller {
             showError(e); // any other exceptions
         }
     }
+     /**
+      * Delete a single value to the dataset
+      * <p>
+      * Deletes the first occurrence of a single value from the current dataset.
+      * Handles any errors in removing it.
+      * */
     @FXML
     public void deleteValue(){
         try {
-            gradeAnalyzer.deleteValue(Double.parseDouble(singleValueField.getText())); // delete this one value
-            recordAction(String.format("Delete data value: %s\n",singleValueField.getText()));
+            double toDelete = Double.parseDouble(singleValueField.getText());
+
+            if(!gradeAnalyzer.getValues().contains(toDelete)){
+                recordAction(String.format("Fail delete data value: %s\n",singleValueField.getText()));
+                showError(new RuntimeException("Unable to delete data.")); // if it isn't a number
+                errorState=false;
+            }else{
+                gradeAnalyzer.deleteValue(toDelete); // delete this one value
+                recordAction(String.format("Delete data value: %s\n",singleValueField.getText()));
+            }
         } catch (NumberFormatException e) { // wrong data type
             recordAction(String.format("Fail delete data value: %s\n",singleValueField.getText()));
             showError(new RuntimeException("Data point is of the wrong data type. Please enter an integer or decimal value.")); // if it isn't a number
@@ -240,8 +278,13 @@ public class Controller {
             showError(e); // any other exceptions
         }
     }
+     /**
+      * Create a .txt report of all actions performed
+      * <p>
+      * Opens a file navigator to allow user to set where to save the sessions report.
+      * */
     @FXML
-    public void createReport() throws IOException {
+    public void createReport(){
         File file;
         FileChooser fileChooser;
         BufferedWriter fileWriter;
@@ -249,50 +292,71 @@ public class Controller {
 
         fileChooser = new FileChooser();
         fileChooser.setTitle("Where would you like to save this report to?");
-        file = fileChooser.showOpenDialog(filepathField.getScene().getWindow()); // let user select file
+        file = fileChooser.showSaveDialog(filepathField.getScene().getWindow()); // let user select file
 
-        fileWriter = new BufferedWriter(new FileWriter(file));
+        try {
+            fileWriter = new BufferedWriter(new FileWriter(file));
+
+            iter = recordOfActions.iterator();
+            while(iter.hasNext()){
+                fileWriter.append(iter.next());
+            }
+
+            fileWriter.close();
 
 
-        recordAction(String.format("Create report to: %s\n",file.toString()));
-
-
-
-        iter = recordOfActions.iterator();
-        while(iter.hasNext()){
-            fileWriter.append(iter.next());
-        }
-
-        fileWriter.close();
+            recordAction(String.format("Create report to: %s\n",file.toString()));
+        } catch (IOException e) {
+            recordAction(String.format("Fail create report to: %s\n",file.toString()));
+            e.printStackTrace();
+        } catch (NullPointerException ignored){} // don't do anything here - not an issue
     }
+     /**
+      * Run analysis on all selected functions
+      * <p>
+      * Runs analysis and shows output for all checked functions
+      * */
     @FXML
     public void analyze(){
         try {
-            if (countCheckbox.isSelected())
-                displayAmount();
-            if (minCheckbox.isSelected())
-                displayMin();
-            if (maxCheckbox.isSelected())
-                displayMax();
-            if (meanCheckbox.isSelected())
-                displayMean();
-            if (medianCheckbox.isSelected())
-                displayMedian();
-            if (modeCheckbox.isSelected())
-                displayMode();
-            if (valuesCheckbox.isSelected())
-                displayValues();
-            if (graphCheckbox.isSelected())
-                displayGraph();
-            if (percentileCheckbox.isSelected())
-                displayPercentiles();
+            if(gradeAnalyzer.getAmount()==0) {
+                throw new RuntimeException("Dataset does not exist. Cannot perform analysis functions without a dataset.");
+            }else if(errorState){
+                this.errorDisplayContent.getChildren().add(new Label("\nCannot analyze while there are errors."));
+            }else{
+                if (countCheckbox.isSelected())
+                    displayAmount();
+                if (minCheckbox.isSelected())
+                    displayMin();
+                if (maxCheckbox.isSelected())
+                    displayMax();
+                if (meanCheckbox.isSelected())
+                    displayMean();
+                if (medianCheckbox.isSelected())
+                    displayMedian();
+                if (modeCheckbox.isSelected())
+                    displayMode();
+                if (valuesCheckbox.isSelected())
+                    displayValues();
+                if (graphCheckbox.isSelected())
+                    displayGraph();
+                if (percentileCheckbox.isSelected())
+                    displayPercentiles();
+            }
         }catch (Exception e){
+            recordAction("Fail analyze: \n");
             showError(e);
         }
 
     }
 
 
+     /**
+      * Set and lock in boundaries
+      * <p>
+      * Reads upper and lower bounds and either shows error (invalid limits)
+      * or locks the limits for further operations.
+      * */
     private void setBoundaries(){
         double min,max;
 
@@ -313,12 +377,22 @@ public class Controller {
             valueMinField.setDisable(true);
             valueMaxField.setDisable(true);
             this.boundariesLocked = true;
+
+
+            recordAction(String.format("Set boundaries: %s to %s\n", valueMinField.getText(), valueMaxField.getText()));
         } catch (NumberFormatException e) { // wrong data type
+            recordAction(String.format("Failed set boundaries: %s to %s\n", valueMinField.getText(), valueMaxField.getText()));
             showError(new RuntimeException("Data point(s) is of the wrong data type. Please enter an integer or decimal value for range. (Boundaries have wrong data type)")); // if it isn't a number
         } catch (Exception e) {
+            recordAction(String.format("Failed set boundaries: %s to %s\n", valueMinField.getText(), valueMaxField.getText()));
             showError(e); // any other exceptions
         }
     }
+     /**
+      * Show error to screen
+      * <p>
+      * Show an error to the screen.  Open error log section of screen and write most recent error to it
+      * */
     private void showError(Exception e){
         // show error display
         this.errorDisplayWrapper.setMinHeight(300);
@@ -328,40 +402,70 @@ public class Controller {
         // remove existing and add new error message
         this.errorDisplayContent.getChildren().clear();
         this.errorDisplayContent.getChildren().add(new Label(e.getMessage()));
+        recordAction(String.format("Show error log.  Error: %s\n", e.getMessage()));
+
+        errorState=true;
     }
+     /**
+      * Record an action in the log
+      * <p>
+      * Make a record of the action performed in case user wants a log
+      * */
     private void recordAction(String action){
         recordOfActions.add(action);
     }
+     /***
+      * Show nothing on screen
+      * <p>
+      * Removes all calculations and graphics displayed.  Show as if program just stared
+      */
+     private void showNothing(){
+         // clear everything now that there are no values
+         clearGraph();
+         clearValues();
+         clearPercentiles();
+         amountValue.setText("0");
+         minValue.setText("Minimum not calculated");
+         maxValue.setText("Maximum not calculated");
+         meanValue.setText("Mean not calculated");
+         medianValue.setText("Median not calculated");
+         modeValue.setText("Mode not calculated");
+     }
 
     /**
      * Show the size of the dataset.
      * */
     private void displayAmount(){
         amountValue.setText(""+gradeAnalyzer.getAmount());
+        recordAction(String.format("Show amount: %s\n", amountValue.getText()));
     }
      /**
       * Show the minimum value in the dataset.
       * */
     private void displayMin(){
         minValue.setText(String.format("%.3f",gradeAnalyzer.getMinimum()));
+        recordAction(String.format("Show minimum value: %s\n", minValue.getText()));
     }
      /**
       * Show the maximum value in the dataset.
       * */
     private void displayMax(){
         maxValue.setText(String.format("%.3f",gradeAnalyzer.getMaximum()));
+        recordAction(String.format("Show maximum value: %s\n", maxValue.getText()));
     }
      /**
       * Show the mean of the dataset.
       * */
     private void displayMean(){
         meanValue.setText(String.format("%.3f",gradeAnalyzer.getMean()));
+        recordAction(String.format("Show mean: %s\n", meanValue.getText()));
     }
      /**
       * Show the median of the dataset.
       * */
     private void displayMedian(){
         medianValue.setText(String.format("%.3f",gradeAnalyzer.getMedian()));
+        recordAction(String.format("Show median: %s\n", medianValue.getText()));
     }
      /**
       * Show the mode(s) of the dataset.
@@ -391,6 +495,7 @@ public class Controller {
 
 
         modeValue.setText(modeOutput);
+        recordAction(String.format("Show Mode(s): %s\n", modeValue.getText()));
     }
     /**
      * Show all the values in the dataset on screen
@@ -412,6 +517,8 @@ public class Controller {
         VBox column;
         int groupSize, remainingBigGroups;
         double averageGroupSize;
+        StringBuilder valuesAll;
+        Label label;
 
         copyOfValues = new LinkedList<>(gradeAnalyzer.getValues()); // a copy of the increasing values (so we can safely pop values of list)
         contentsOfValuesPane = new HBox();
@@ -424,6 +531,8 @@ public class Controller {
         if(copyOfValues.size() == 0){
             return;
         }
+
+        copyOfValues.sort(Double::compareTo); // sort values
 
 
         //  Determine how far off groupSize and averageGroupSize are to determine if different columns need to be
@@ -456,7 +565,8 @@ public class Controller {
             }
 
             for(int j=0; j<groupSize; j++){ // insert all values for this column
-                column.getChildren().add(new Label(String.format("%.1f",copyOfValues.pop())));
+                label=new Label(String.format("%.1f",copyOfValues.pop()));
+                column.getChildren().add(label);
             }
 
             remainingBigGroups--;
@@ -471,6 +581,22 @@ public class Controller {
         valuesPane.setContent(contentsOfValuesPane);
         valuesPane.setPrefHeight(300);
 
+
+        /* Record data for log */
+        valuesAll = new StringBuilder();
+        for(int i=0; i<groupSize+1; i++){ // each row
+            for(int j=0; j<5; j++){ // each column
+                try{
+                    column = (VBox) contentsOfValuesPane.getChildren().get(j);
+                    label = (Label) column.getChildren().get(i);
+
+                    valuesAll.append(String.format("%s        ",label.getText()));
+                }catch (Exception ignored){}
+            }
+            valuesAll.append("\n");
+
+        }
+        recordAction(String.format("Show values:\n%s\n", valuesAll.toString()));
     }
     /**
      * Show a histogram of the dataset (10 groups wide)
@@ -484,6 +610,7 @@ public class Controller {
         Region pixel;
         double minTick,maxTick,tickWidth,currentTick,tickRange;
         int valuesAfterTheDecimalPoint;
+        StringBuilder asciiGraph = new StringBuilder();
 
         // Display axis info
         minTick = graphData.get(10);
@@ -518,15 +645,25 @@ public class Controller {
             }
         }
 
+        asciiGraph.append(String.format("%.2f\n",minTick));
+        currentTick = minTick;
         // color pixels corresponding to %-ages in histogram as shades of gray
         for(int i=0; i<10; i++){
             row = (HBox) graphical.getChildren().get(i);
             String color = grayShade((float) (((float) i)/10*.8+.2));
+            asciiGraph.append("      ");
             for(int j=0; j<graphData.get(i)*100; j++){
                 pixel = (Region) row.getChildren().get(j);
                 pixel.setStyle("-fx-background-color: #"+color);
+                asciiGraph.append("X");
             }
+
+            currentTick += tickWidth;
+            asciiGraph.append(String.format("\n%.2f\n",currentTick));
         }
+
+        /* Record data for log */
+        recordAction(String.format("Show graph:\n%s\n", asciiGraph.toString()));
     }
     /**
      * Show average grades for each percentile
@@ -536,12 +673,59 @@ public class Controller {
     private void displayPercentiles(){
         LinkedList<Double> percentileGrades = gradeAnalyzer.getPercentiles();
         Label currentLabel;
+        StringBuilder allPercentiles = new StringBuilder();
 
         for(int i=0; i<10; i++){
             currentLabel = (Label) percentileVBox.getChildren().get(i);
             currentLabel.setText(String.format("The average grade for the %d%% to %d%% range is %.2f",i*10,i*10+10,percentileGrades.get(i)));
+            allPercentiles.append(currentLabel.getText()).append("\n");
         }
+
+        /* Record for log */
+        recordAction(String.format("Show percentiles:\n%s", allPercentiles.toString()));
     }
+
+
+
+     /**
+      * Clear all the values in the dataset on screen
+      * <p>
+      * Removes all values from scrollable list of values
+      * */
+     private void clearGraph(){
+         HBox row;
+         Region pixel;
+
+         // Color all pixels white
+         for(int i=0; i<10; i++) { // 10 high
+             row = (HBox) graphical.getChildren().get(i);
+             for (int j=0; j<100; j++) { // 100 wide
+                 pixel = (Region) row.getChildren().get(j);
+                 pixel.setStyle("-fx-background-color: #ffffff");
+             }
+         }}
+     /**
+      * Clears the histogram of the dataset
+      * <p>
+      * Remove the data from the histogram
+      * Set all pixels white and clear axis labels
+      * */
+     private void clearValues(){
+         valuesPane.setContent(null);
+     }
+     /**
+      * Clear the average grades for each percentile
+      * <p>
+      * Clear out this section of the screen
+      * */
+     private void clearPercentiles(){
+         Label currentLabel;
+
+         for(int i=0; i<10; i++){
+             currentLabel = (Label) percentileVBox.getChildren().get(i);
+             currentLabel.setText("");
+         }
+     }
 
 
 
