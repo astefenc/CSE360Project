@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GradeAnalyzer {
-    List<Double> values;
-    double lowerBound, upperBound;
+    private LinkedList<Double> values;
+    private double lowerBound, upperBound;
 
     GradeAnalyzer(){
         this.values = new LinkedList<Double>();
@@ -13,63 +13,75 @@ public class GradeAnalyzer {
         this.upperBound = 100.0;
     }
 
-    int getAmount() throws RuntimeException{
+    int getAmount() {
         return values.size();
     }
-/*
-    double getMaximum() throws RuntimeException{}
 
-    double getMinimum() throws RuntimeException{}
+    double getMaximum() throws RuntimeException{
+        return 0;
+    }
 
-    double getMean() throws RuntimeException{}
+    double getMinimum() throws RuntimeException{
+        return 0;}
 
-    double getMedian() throws RuntimeException{}
+    double getMean() throws RuntimeException{
+        return 0;}
 
-    double getMode() throws RuntimeException{}
+    double getMedian() throws RuntimeException{
+        return 0;}
 
-    List<Double> getValues() throws RuntimeException{
+    LinkedList<Double> getMode() throws RuntimeException{
+        return new LinkedList<>();}
+
+    LinkedList<Double> getValues() throws RuntimeException{
         return this.values;
     }
 
-    /*
-        Returns a 10 bin wide histogram depicting the data
 
-        index  |    what
-        0      |    MINIMUM PERMITTED VALUE
-        1      |    MAXIMUM PERMITTED VALUE
-        2      |    Bin size
-        3-12   |    values for each bin
-     */
-    List<Double> getGraph() {
-        ArrayList<Double> graphData = new ArrayList<>();
-        int binSize, bin, dataIndex, totalCount;
+
+    LinkedList<Double> getGraph() {
+        LinkedList<Double> graphData = new LinkedList<>();
+        int totalCount;
+        double binSize;
 
         // initialize arrayList
-        for(int i=0; i<13; i++){
+        for(int i=0; i<10; i++){
             graphData.add(0.0);
         }
 
-        // mark upper and lower bounds
-        graphData.set(0, this.lowerBound);
-        graphData.set(1, this.upperBound);
-
-        // and the bin size
-        binSize = ((int) Math.ceil((this.upperBound - this.lowerBound) / 10.0));
-        graphData.set(2, (double) binSize);
+        // the bin size
+        binSize = (this.upperBound - this.lowerBound) / 10.0;
 
         // count up amount of values in each bin
-        for(int i=0; i<this.values.size(); i++){
-            bin = (int)(this.values.get(i)/binSize);
-            dataIndex = bin+2;
-
-            graphData.set(dataIndex, graphData.get(dataIndex)+1); // increment value by 1
+        for (Double value : this.values) {
+            if(value<=binSize){
+                graphData.set(0, graphData.get(0) + 1);
+            }else if(value<=2*binSize){
+                graphData.set(1, graphData.get(1) + 1);
+            }else if(value<=3*binSize){
+                graphData.set(2, graphData.get(2) + 1);
+            }else if(value<=4*binSize){
+                graphData.set(3, graphData.get(3) + 1);
+            }else if(value<=5*binSize){
+                graphData.set(4, graphData.get(4) + 1);
+            }else if(value<=6*binSize){
+                graphData.set(5, graphData.get(5) + 1);
+            }else if(value<=7*binSize){
+                graphData.set(6, graphData.get(6) + 1);
+            }else if(value<=8*binSize){
+                graphData.set(7, graphData.get(7) + 1);
+            }else if(value<=9*binSize){
+                graphData.set(8, graphData.get(8) + 1);
+            }else{
+                graphData.set(9, graphData.get(9) + 1);
+            }
         }
 
         // count total amount of values
         totalCount = values.size();
 
         // Get proportion for each index instead of count
-        for(int i=3; i<13; i++){
+        for(int i=0; i<10; i++){
             graphData.set(i, (graphData.get(i)/ (double) totalCount));
         }
 
@@ -77,20 +89,35 @@ public class GradeAnalyzer {
         return graphData; // results in 10 section wide histogram
     }
 /*
-    List<Double> getPercentiles() throws RuntimeException{}
+    LinkedList<Double> getPercentiles() throws RuntimeException{}
 */
+
+
+    /**
+     * Set the lower bound for the dataset
+     */
     void setLowerBound(double value){
         this.lowerBound = value;
     }
 
+    /**
+     * Set the upper bound for the dataset
+     */
     void setUpperBound(double value){
         this.upperBound = value;
     }
 
+    /**
+     * Load the file at filepath
+     *
+     * @throws IOException - if file does not exist
+     * @throws RuntimeException - for invalid program states (boundaries wrong or out-of-range data)
+     *                            OR invalid file extension
+     *
+     * @returns
+     */
     void loadFile(String filepath) throws RuntimeException, IOException {
-        FileReader fileReader;
         BufferedReader bufferedReader;
-        String line;
         int lengthOfFilePath;
 
 
@@ -191,6 +218,7 @@ public class GradeAnalyzer {
     void clearValues() throws RuntimeException{
         values.clear();
     }
+
 
 
     /*      Runetime Exception example

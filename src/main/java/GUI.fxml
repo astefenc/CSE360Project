@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+/**
+ * @author  Robert Nordman
+ *          ASUID: 1215721572
+ *          Class: Arizona State University CSE360 - #70641
+ *          Assignment #: Group Project - Grade Analyzer
+ *
+ * GUI.fxml - Describes the main layout of the JavaFX window.
+ * positions elements on screen.
+ * Buttons all have a onAction attribute to call a controller function when pressed
+ * And all input/output fields have an fx:id to allow them to be accessed by the controller.
+*/
+
+
+/**
+ * GUI.fxml - An fxml files for the markdown describing the main view in the
+ * GradeAnalyzer JavaFX window.
+ * <p>
+ * The markup for the main view of GradeAnalyzer.
+ * There are a few things that are not laid out here.  They are:
+ *   1. The Graphical display.  this has a 100x10 grid of objects which would be tedious to define here.
+ *
+ * @author Robert Nordman
+ * @version 1.3
+ */
+-->
+
+
+
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -24,6 +53,7 @@
             <TextField fx:id="valueMinField" text="0"/>
             <Label text="to" />
             <TextField fx:id="valueMaxField" text="100"/>
+            <Button onAction="#reset" text="⟲"></Button>
          </HBox>
          <HBox alignment="CENTER" spacing="5">
             <Label text="Filepath:" />
@@ -47,24 +77,22 @@
             </font>
          </Label>
          <VBox alignment="CENTER" spacing="5">
-            <children>
-               <CheckBox fx:id="countCheckbox" text="Output count" />
-               <CheckBox fx:id="minCheckbox" text="Output minimum" />
-               <CheckBox fx:id="maxCheckbox" text="Output maximum" />
-               <CheckBox fx:id="meanCheckbox" text="Output mean" />
-               <CheckBox fx:id="medianCheckbox" text="Output median" />
-               <CheckBox fx:id="modeCheckbox" text="Output mode" />
-               <CheckBox fx:id="percentileCheckbox" text="Output percentiles" />
-               <CheckBox fx:id="valuesCheckbox" text="Output values" />
-               <CheckBox fx:id="graphCheckbox" text="Output graph" />
-            </children>
             <opaqueInsets>
-               <Insets />
+               <Insets/>
             </opaqueInsets>
+            <CheckBox fx:id="countCheckbox" text="Output count"/>
+            <CheckBox fx:id="minCheckbox" text="Output minimum"/>
+            <CheckBox fx:id="maxCheckbox" text="Output maximum"/>
+            <CheckBox fx:id="meanCheckbox" text="Output mean"/>
+            <CheckBox fx:id="medianCheckbox" text="Output median"/>
+            <CheckBox fx:id="modeCheckbox" text="Output mode"/>
+            <CheckBox fx:id="percentileCheckbox" text="Output percentiles"/>
+            <CheckBox fx:id="valuesCheckbox" text="Output values"/>
+            <CheckBox fx:id="graphCheckbox" text="Output graph"/>
          </VBox>
          <HBox alignment="CENTER" spacing="10">
-            <Button text="Create report" />
-            <Button text="Analyze" onAction="#displayGraph" />
+            <Button text="Create report" onAction="#createReport"/>
+            <Button text="Analyze" onAction="#analyze" />
          </HBox>
          <opaqueInsets>
             <Insets />
@@ -80,61 +108,66 @@
             <Font name="System Bold" size="20.0" />
          </font></Label>
       <HBox>
-         <children>
-            <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10" style="-fx-padding: 5px; -fx-background-color: #ece4b7;" HBox.hgrow="ALWAYS">
-               <Label text="Details">
-                  <font>
-                     <Font size="16.0" />
-                  </font></Label>
-               <HBox>
-                  <Label text="Amount:" />
-                  <Label fx:id="amountValue" />
-               </HBox>
-               <HBox>
-                  <Label text="Min:" />
-                  <Label fx:id="minValue" />
-               </HBox>
-               <HBox>
-                  <Label text="Max:" />
-                  <Label fx:id="maxValue" />
-               </HBox>
-               <HBox>
-                  <Label text="Mean:" />
-                  <Label fx:id="meanValue" />
-               </HBox>
-               <HBox>
-                  <Label text="Median:" />
-                  <Label fx:id="medianValue" />
-               </HBox>
-               <HBox>
-                  <Label text="Mode:" />
-                  <Label fx:id="modeValue" />
-               </HBox>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10" style="-fx-padding: 5px;">
-               <Label text="Values">
-                  <font>
-                     <Font size="16.0" />
-                  </font></Label>
-               <ScrollPane fx:id="valuesPane">
+         <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10"
+               style="-fx-padding: 5px; -fx-background-color: #ece4b7;" HBox.hgrow="ALWAYS">
+            <Label text="Details">
+               <font>
+                  <Font size="16.0"/>
+               </font>
+            </Label>
+            <HBox>
+               <Label text="Amount:"/>
+               <Label fx:id="amountValue"/>
+            </HBox>
+            <HBox>
+               <Label text="Min:"/>
+               <Label fx:id="minValue"/>
+            </HBox>
+            <HBox>
+               <Label text="Max:"/>
+               <Label fx:id="maxValue"/>
+            </HBox>
+            <HBox>
+               <Label text="Mean:"/>
+               <Label fx:id="meanValue"/>
+            </HBox>
+            <HBox>
+               <Label text="Median:"/>
+               <Label fx:id="medianValue"/>
+            </HBox>
+            <HBox>
+               <Label text="Mode:"/>
+               <Label fx:id="modeValue"/>
+            </HBox>
+         </VBox>
+         <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10" style="-fx-padding: 5px;">
+            <Label text="Values">
+               <font>
+                  <Font size="16.0"/>
+               </font>
+            </Label>
+            <ScrollPane fx:id="valuesPane">
 
-               </ScrollPane>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10" style="-fx-padding: 5px; -fx-background-color: #c7ac92;" HBox.hgrow="ALWAYS">
-               <Label text="Distribution">
-                  <font>
-                     <Font size="16.0" />
-                  </font></Label>
-               <HBox fx:id="graphPane"/>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10" style="-fx-padding: 5px; -fx-background-color: #ece4b7;" HBox.hgrow="ALWAYS">
-               <Label text="Percentiles">
-                  <font>
-                     <Font size="16.0" />
-                  </font></Label>
-               <Pane fx:id="percentilePane" />
-            </VBox>
-         </children>
+            </ScrollPane>
+         </VBox>
+         <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10"
+               style="-fx-padding: 5px; -fx-background-color: #c7ac92;" HBox.hgrow="ALWAYS">
+            <Label text="Distribution">
+               <font>
+                  <Font size="16.0"/>
+               </font>
+            </Label>
+            <HBox fx:id="graphPane"/>
+         </VBox>
+         <VBox alignment="TOP_CENTER" prefWidth="200" spacing="10"
+               style="-fx-padding: 5px; -fx-background-color: #ece4b7;" HBox.hgrow="ALWAYS">
+            <Label text="Percentiles">
+               <font>
+                  <Font size="16.0"/>
+               </font>
+            </Label>
+            <Pane fx:id="percentilePane"/>
+         </VBox>
       </HBox>
       <ScrollPane fx:id="errorDisplayWrapper" maxHeight="0" minHeight="0" prefHeight="0" VBox.vgrow="ALWAYS">
          <VBox fx:id="errorDisplayContent">

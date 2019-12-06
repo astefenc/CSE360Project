@@ -4,6 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.*;
 
+
 public class GUI extends Application {
 
     public static void main(String[] args) {
@@ -12,7 +13,6 @@ public class GUI extends Application {
 
     @Override
     public void init(){
-
     }
 
     @Override
