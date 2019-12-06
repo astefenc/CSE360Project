@@ -1,11 +1,3 @@
-/*
- * @author  Robert Nordman
- *          ASUID: 1215721572
- *          Class: Arizona State University CSE360 - #70641
- *          Assignment #: Group Project - Grade Analyzer
- *
- */
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

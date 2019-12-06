@@ -1,11 +1,3 @@
-/*
- * @author  Robert Nordman
- *          ASUID: 1215721572
- *          Class: Arizona State University CSE360 - #70641
- *          Assignment #: Group Project - Grade Analyzer
- *
- */
-
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
