@@ -10,6 +10,8 @@ import org.junit.rules.ExpectedException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 class GradeAnalyzerTest {
 
     // create dummy test data
@@ -37,7 +39,7 @@ class GradeAnalyzerTest {
 
         gradeAnalyzer1.setLowerBound(0.0);
         gradeAnalyzer1.setUpperBound(100.0);
-        gradeAnalyzer1.setValues(values1);
+        //gradeAnalyzer1.setValues(values1);
 
         values2.add(11.2);
         values2.add(14.87);
