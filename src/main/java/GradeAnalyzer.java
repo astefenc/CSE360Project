@@ -36,8 +36,8 @@ public class GradeAnalyzer {
      */
     double getMean() throws RuntimeException{
         Iterator<Double> iter = values.iterator();
-        double total = values.getValue(0);
-
+        double total = 0;
+        
         do {
             total += iter.next();
         } while(iter.hasNext());
@@ -57,11 +57,11 @@ public class GradeAnalyzer {
 
         if(copyOfValues.size() == 2)
         {
-            double val = (copyOfValues.getValue(0) + copyOfValues.getValue(1)) / 2;
+            double val = (copyOfValues.get(0) + copyOfValues.get(1)) / 2;
             return val;
         }
         else {
-            return copyOfValues.getValue(0);
+            return copyOfValues.get(0);
         }
 
     }
