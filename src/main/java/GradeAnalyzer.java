@@ -163,7 +163,22 @@ public class GradeAnalyzer {
     }
 
     LinkedList<Double> getPercentiles() throws RuntimeException{
-        LinkedList<Double> percentGraph = new LinkedList<>();
+        LinkedList<Double> sortedScores = new LinkedList<>(values);
+        Collections.sort(sortedScores);
+        LinkedList<Double> percentGroups = new LinkedList<Double>();
+        int sizeOfColumns = sortedScores.size()/10;
+
+        // initialize arrayList
+        for(int i=0; i<10; i++){
+            percentGroups.add(0.0);
+        }
+
+        for(int i = 0; i<10; i++){
+            for(int j = 0; j<sizeOfColumns; j++){
+                percentGroups.set(i, percentGroups.get(i) + sortedScores.pop());
+            }
+        }
+        /*
         int[] arr;
         arr = new int[10];  // array to keep track of the number of values in each range
         int totalCount;
@@ -174,9 +189,10 @@ public class GradeAnalyzer {
         for(int i=0; i<10; i++){
             percentGraph.add(0.0);
         }
-
+        */
         // count up amount of total value in each range
         // also: keep track of how many values are in each range
+        /*
         for (Double value : this.values) {
             if(value<10){
                 percentGraph.set(0, percentGraph.get(0) + value);
@@ -210,15 +226,14 @@ public class GradeAnalyzer {
                 arr[9] += 1;
             }
         }
-
+        */
         // Get average for each index instead of the percentgraph
         for(int i=0; i<10; i++){
-            if(arr[i] != 0)
-                percentGraph.set(i, (percentGraph.get(i)/ arr[i]));
+                percentGroups.set(i, (percentGroups.get(i)/ sizeOfColumns));
         }
 
 
-        return percentGraph; // results in 10 different ranges of percentages
+        return percentGroups; // results in 10 different ranges of percentages
   }
 
 
