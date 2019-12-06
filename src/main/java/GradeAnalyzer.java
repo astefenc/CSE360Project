@@ -18,11 +18,12 @@ public class GradeAnalyzer {
     }
 
     double getMaximum() throws RuntimeException{
-        return 0;
+        return Collections.max(values);
     }
 
     double getMinimum() throws RuntimeException{
-        return 0;}
+        return Collections.min(values);
+    }
 
     double getMean() throws RuntimeException{
         return 0;}
