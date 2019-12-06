@@ -1,10 +1,9 @@
-import java.io.*;
-import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class GradeAnalyzer {
@@ -163,25 +162,7 @@ public class GradeAnalyzer {
         return graphData;
     }
 
-    // TODO
     LinkedList<Double> getPercentiles() throws RuntimeException{
-        LinkedList<Double> li = new LinkedList<>();
-        li.add(1.11);
-        li.add(2.22);
-        li.add(3.33);
-        li.add(4.44);
-        li.add(5.55);
-        li.add(6.66);
-        li.add(7.77);
-        li.add(8.88);
-        li.add(9.99);
-        li.add(10.10);
-
-        return li;
-    }
-
-    LinkedList<Double> getPercentiles() throws RuntimeException{
-
         LinkedList<Double> percentGraph = new LinkedList<>();
         int[] arr;
         arr = new int[10];  // array to keep track of the number of values in each range
