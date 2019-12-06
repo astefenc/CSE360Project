@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -13,6 +11,10 @@ public class GradeAnalyzer {
         this.values = new LinkedList<Double>();
         this.lowerBound = 0.0;
         this.upperBound = 100.0;
+    }
+
+    void setValues(LinkedList<Double> _values) {
+        values = _values;
     }
 
     int getAmount() {
