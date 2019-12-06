@@ -1,5 +1,11 @@
 import java.io.*;
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class GradeAnalyzer {
     private LinkedList<Double> values;
@@ -9,10 +15,6 @@ public class GradeAnalyzer {
         this.values = new LinkedList<>();
         this.lowerBound = 0.0;
         this.upperBound = 100.0;
-    }
-
-    void setValues(LinkedList<Double> _values) {
-        values = _values;
     }
 
     int getAmount() {
@@ -85,24 +87,44 @@ public class GradeAnalyzer {
         }
     }
 
-    LinkedList<Double> getValues() throws RuntimeException{
+
+    /**
+     * Returns the list of all the values in the dataset
+     * <p>
+     * @return all values in dataset
+     * */
+    LinkedList<Double> getValues(){
         return this.values;
     }
-
-
-
+    /**
+     * Returns a list of histogram data
+     * <p>
+     * The list returned contains the proportions of data in each tenth of the range
+     *
+     * @return list of histogram data
+     * index                    data
+     * 0-9                      Proportions of data in each tenth of the range
+     * 10                       lower bound
+     * 11                       upper bound
+     * 12                       bin width (binSize)
+     * */
     LinkedList<Double> getGraph() {
         LinkedList<Double> graphData = new LinkedList<>();
         int totalCount;
         double binSize;
 
         // initialize arrayList
-        for(int i=0; i<10; i++){
+        for(int i=0; i<13; i++){
             graphData.add(0.0);
         }
 
         // the bin size
         binSize = (this.upperBound - this.lowerBound) / 10.0;
+
+        // record min, max, binSize
+        graphData.set(10, this.lowerBound);
+        graphData.set(11, this.upperBound);
+        graphData.set(12, binSize);
 
         // count up amount of values in each bin
         for (Double value : this.values) {
@@ -132,13 +154,30 @@ public class GradeAnalyzer {
         // count total amount of values
         totalCount = values.size();
 
-        // Get proportion for each index instead of count
+        // Get proportion for each bin instead of count
         for(int i=0; i<10; i++){
             graphData.set(i, (graphData.get(i)/ (double) totalCount));
         }
 
 
-        return graphData; // results in 10 section wide histogram
+        return graphData;
+    }
+
+    // TODO
+    LinkedList<Double> getPercentiles() throws RuntimeException{
+        LinkedList<Double> li = new LinkedList<>();
+        li.add(1.11);
+        li.add(2.22);
+        li.add(3.33);
+        li.add(4.44);
+        li.add(5.55);
+        li.add(6.66);
+        li.add(7.77);
+        li.add(8.88);
+        li.add(9.99);
+        li.add(10.10);
+
+        return li;
     }
 
     LinkedList<Double> getPercentiles() throws RuntimeException{
@@ -199,8 +238,7 @@ public class GradeAnalyzer {
 
 
         return percentGraph; // results in 10 different ranges of percentages
-    }
-
+  }
 
 
     /**
@@ -209,7 +247,6 @@ public class GradeAnalyzer {
     void setLowerBound(double value){
         this.lowerBound = value;
     }
-
     /**
      * Set the upper bound for the dataset
      */
@@ -221,15 +258,12 @@ public class GradeAnalyzer {
      * Load the file at filepath
      *
      * @throws IOException - if file does not exist
-     * @throws RuntimeException - for invalid program states (boundaries wrong or out-of-range data)
+     * @throws RuntimeException - for invalid program states (out-of-range data or non-numerical data)
      *                            OR invalid file extension
-     *
-     * @returns
      */
     void loadFile(String filepath) throws RuntimeException, IOException {
         BufferedReader bufferedReader;
         int lengthOfFilePath;
-
 
         // Try to find the file
         try {
@@ -255,9 +289,18 @@ public class GradeAnalyzer {
 
 
     }
+    /**
+     * Read values from a txt file with one decimal or integer value per line
+     *
+     * @throws RuntimeException - invalid datatype
+     *                              OR value is out of range (see message of error for which)
+     * @throws IOException - fails to close file
+     * */
     private void readFromTxt(BufferedReader bufferedReader) throws RuntimeException, IOException{
         String line;
         int lineNum;
+        double value;
+        LinkedList<Double> alreadyAdded = new LinkedList<>();
 
         lineNum = 0;
 
@@ -266,10 +309,18 @@ public class GradeAnalyzer {
             lineNum++; // increment line counter
 
             try {
-                this.addValue(Double.parseDouble(line));    // add each value line-by-line
+                value = Double.parseDouble(line);
+                this.addValue(value);    // add each value line-by-line
+                alreadyAdded.add(value);
             }catch (NumberFormatException e){ // wrong data type
+                for(double d : alreadyAdded){
+                    this.deleteValue(d);
+                }
                 throw new RuntimeException("Data point is of the wrong data type. Please enter an integer or decimal value. (Value "+line+" on line "+lineNum+" is the wrong data type)");
             } catch (RuntimeException e){   // other exception
+                for(double d : alreadyAdded){
+                    this.deleteValue(d);
+                }
                 if(e.getMessage().contains("out of range")){
                     throw new RuntimeException("Input value(s) out of range.  (Value "+line+" on line "+lineNum+" is out of range)");   // out of range - add line info
                 }else{
@@ -281,10 +332,19 @@ public class GradeAnalyzer {
         // Close file
         bufferedReader.close();
     }
+    /**
+     * Read values from a csv file with each decimal or integer value separated by commas or newlines
+     *
+     * @throws RuntimeException - invalid datatype
+     *                              OR value is out of range (see message of error for which)
+     * @throws IOException - fails to close file
+     * */
     private void readFromCsv(BufferedReader bufferedReader) throws RuntimeException, IOException{
         String line,delimiter;
         int lineNum;
         String[] lineSplit;
+        double value;
+        LinkedList<Double> alreadyAdded = new LinkedList<>();
 
         delimiter = ",";
         lineNum = 0;
@@ -295,13 +355,20 @@ public class GradeAnalyzer {
 
             lineSplit = line.split(delimiter);
 
-            for (String s : lineSplit) {
+            for(int i=0; i<lineSplit.length; i++){
                 try {
-                    this.addValue(Double.parseDouble(s));    // add each value
-
+                    value = Double.parseDouble(lineSplit[i]);
+                    this.addValue(value);    // add each value line-by-line
+                    alreadyAdded.add(value);
                 } catch (NumberFormatException e) { // wrong data type
+                    for(double d : alreadyAdded){
+                        this.deleteValue(d);
+                    }
                     throw new RuntimeException("Data point is of the wrong data type. Please enter an integer or decimal value. (Value "+line+" on line "+lineNum+" is the wrong data type)");
                 } catch (RuntimeException e){
+                    for(double d : alreadyAdded){
+                        this.deleteValue(d);
+                    }
                     if(e.getMessage().contains("out of range")){
                         throw new RuntimeException("Input value(s) out of range.  (Value "+line+" on line "+lineNum+" is out of range)");   // out of range - add line info
                     }else{
@@ -315,27 +382,34 @@ public class GradeAnalyzer {
         bufferedReader.close();
     }
 
+    /**
+     * Add this single value to the dataset
+     *
+     * @throws RuntimeException - value is out of range (see message of error for which)
+     * */
     void addValue(double value) throws RuntimeException{
         if(value > this.upperBound || value < this.lowerBound){
             throw new RuntimeException("Input value(s) out of range.");
         }else{
-            this.values.add(value);
+            values.add(value);
         }
     }
-
-    void deleteValue(double value) throws RuntimeException{}
-
-    void clearValues() throws RuntimeException{
+    /**
+     * Delete the first occurrence from the dataset
+     *
+     * @throws RuntimeException - value is out of range (see message of error for which)
+     * */
+    void deleteValue(double value) throws RuntimeException{
+        if(value > this.upperBound || value < this.lowerBound){
+            throw new RuntimeException("Input value(s) out of range.");
+        }else{
+            values.removeFirstOccurrence(value);
+        }
+    }
+    /**
+     * Delete all values from the dataset
+     * */
+    void clearValues(){
         values.clear();
     }
-
-
-
-    /*      Runetime Exception example
-                custom error messages should be as declared in user guide
-     */
-    void example() throws RuntimeException{
-        throw new RuntimeException("CUSTOM ERROR MSG");
-    }
-
 }

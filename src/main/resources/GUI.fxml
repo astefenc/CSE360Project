@@ -53,7 +53,7 @@
             <TextField fx:id="valueMinField" text="0"/>
             <Label text="to" />
             <TextField fx:id="valueMaxField" text="100"/>
-            <Button onAction="#reset" text="⟲"></Button>
+            <Button onAction="#reset" text="⟲"/>
          </HBox>
          <HBox alignment="CENTER" spacing="5">
             <Label text="Filepath:" />
@@ -166,7 +166,7 @@
                   <Font size="16.0"/>
                </font>
             </Label>
-            <Pane fx:id="percentilePane"/>
+            <VBox fx:id="percentileVBox"/>
          </VBox>
       </HBox>
       <ScrollPane fx:id="errorDisplayWrapper" maxHeight="0" minHeight="0" prefHeight="0" VBox.vgrow="ALWAYS">
