@@ -32,9 +32,9 @@ public class GradeAnalyzer {
         Iterator<Double> iter = values.iterator();
         double total = values.getFirst();
 
-        while(iter.hasNext()){
+        do {
             total += iter.next();
-        }
+        } while(iter.hasNext())
 
         return (total/values.size());
     }
@@ -45,6 +45,7 @@ public class GradeAnalyzer {
         Iterator<Double> quickIter = copyOfValues.iterator();
         Iterator<Double> slowIter = copyOfValues.iterator();
         Iterator<Double> previousIter = copyOfValues.iterator();
+        boolean even = true;
 
         while(quickIter.hasNext()) { // quick iter moves at double the speed of slow iter so when it
             quickIter.next();    // reaches the end of the linkedlist, slow iter is in the middle
@@ -53,13 +54,15 @@ public class GradeAnalyzer {
 
                 previousIter = slowIter;
                 slowIter.next();
+            } else {
+                even = false;
             }
         }
 
-        if(!quickIter.equals(null)) { //if quick iter isn't null, the list has an odd size.
-            return previousIter.next();
-        }else{
+        if(even) { // the list has an even size.
             return ( previousIter.next() + slowIter.next() )/2.0;
+        }else{
+            return previousIter.next();
         }
     }
 
