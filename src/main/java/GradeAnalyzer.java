@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,10 @@ public class GradeAnalyzer {
         this.values = new LinkedList<Double>();
         this.lowerBound = 0.0;
         this.upperBound = 100.0;
+    }
+
+    void setValues(LinkedList<Double> _values) {
+        values = _values;
     }
 
     int getAmount() {

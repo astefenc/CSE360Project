@@ -1,3 +1,4 @@
+import org.hamcrest.Matcher;
 import org.junit.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,12 +16,9 @@ class GradeAnalyzerTest {
     GradeAnalyzer gradeAnalyzer1 = new GradeAnalyzer();
     GradeAnalyzer gradeAnalyzer2 = new GradeAnalyzer();
     GradeAnalyzer gradeAnalyzer3 = new GradeAnalyzer();
-    List<Double> values1 = new LinkedList<>();
-    List<Double> values2 = new LinkedList<>();
-    List<Double> values3 = new LinkedList<>();
-
-    //TODO:Ange; Make test lists more robust, then calculate actual values, and use those in tests.
-
+    LinkedList<Double> values1 = new LinkedList<>();
+    LinkedList<Double> values2 = new LinkedList<>();
+    LinkedList<Double> values3 = new LinkedList<>();
 
     @Before
     public void createTestData() {
@@ -70,8 +68,9 @@ class GradeAnalyzerTest {
 
     @Test
     void testGetAmount() {
-        assertEquals(gradeAnalyzer1.getAmount(), 11, .001);
+        assertEquals(gradeAnalyzer1.getAmount(), 12, .001);
         assertEquals(gradeAnalyzer2.getAmount(), 10, .001);
+        assertEquals(gradeAnalyzer3.getAmount(), 7, .001);
     }
 
     @Test
@@ -84,28 +83,23 @@ class GradeAnalyzerTest {
     void testGetMinimum() {
         assertEquals(gradeAnalyzer1.getMinimum(), 2.1, .001);
         assertEquals(gradeAnalyzer2.getMinimum(), 10.1, .001);
+        assertEquals(gradeAnalyzer3.getMinimum(), 0, 0.0001);
     }
 
     @Test
     void testGetMean() {
-        //TODO - Ange; should probably just hardcode actual mean value
-        double mean1 = 0;
-        double mean2 = 0;
-        double sum1 = 0;
-        for (Double value : values1) {
-            sum1 += value;
-        }
-        assertEquals(gradeAnalyzer1.getMean(), mean1, .001);
-        assertEquals(gradeAnalyzer2.getMean(), mean2, .001);
+        assertEquals(gradeAnalyzer1.getMean(), 74.28035833, .01);
+        assertEquals(gradeAnalyzer2.getMean(), 32.663, .01);
+        assertEquals(gradeAnalyzer3.getMean(), 5.42857, .01);
     }
 
     @Test
     void testGetMedian() {
-        double median1 = 0;
-        double median2 = 0;
-
-        assertEquals(gradeAnalyzer1.getMedian(), median1, .001);
-        assertEquals(gradeAnalyzer2.getMedian(), median2, .001);
+        // Even number of entries in dataset
+        assertEquals(gradeAnalyzer1.getMedian(), 84.805, .01);
+        assertEquals(gradeAnalyzer2.getMedian(), 35.115, .01);
+        // Odd number of entries in dataset
+        assertEquals(gradeAnalyzer3.getMedian(), 7, 0);
     }
 
     @Rule
@@ -114,28 +108,16 @@ class GradeAnalyzerTest {
     @Test
     void testGetMode() {
         //multiple modes
-        List<Double> actualModes1 = gradeAnalyzer1.getMode();
-        assertThat(actualModes1, hasItems(85.4, 84.21));
-        assertEquals(actualModes1.size(), 2);
+        assertThat(gradeAnalyzer1.getMode(), hasItems(85.4, 84.21));
+        assertEquals(gradeAnalyzer1.getMode().size(), 2);
 
         // No mode
         gradeAnalyzer2.getMode();
         exceptionRule.expectMessage("No mode.");
 
         // One mode
-        assertThat(gradeAnalyzer3.getMode(), hasItems(7));
+        assertThat(gradeAnalyzer3.getMode(), (Matcher<? super LinkedList<Double>>) hasItems(7));
         assertEquals(gradeAnalyzer3.getMode().size(), 1);
 
     }
-
-    @Test
-    void testAddValue() {
-        //TODO - where are values getting added (front or end of list)? Try one case where value added is legal
-
-        gradeAnalyzer2.addValue(63);
-        exceptionRule.expectMessage("Input value(s) out of range.");
-    }
-
-
-
 }
