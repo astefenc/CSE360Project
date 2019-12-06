@@ -1,0 +1,79 @@
+What would you like to do?
+SET_BOUNDARIES [lower] [upper]: Set upper and lower boundaries
+LOAD_FILE [filepath]: Load file, overwrite dataset
+APPEND_FILE [filepath]: Append file data to dataset
+ADD_VALUE [value]: Add one value to dataset
+DELETE_VALUE [value]: Delete single value from dataset
+CLEAR: Clear dateset
+SET_COUNT [0/1]: Change count state
+SET_MINIMUM [0/1]: Change minimum state
+SET_MAXIMUM [0/1]: Change maximum state
+SET_MEAN [0/1]: Change mean state
+SET_MEDIAN [0/1]: Change median state
+SET_MODE [0/1]: Change mode state
+SET_PERCENTILES [0/1]: Change percentiles state
+SET_VALUES [0/1]: Change values display state
+SET_GRAPH [0/1]: Change graph state
+CREATE_REPORT [filepath]: Make a report of session
+ANALYZE: Analyze dataset
+EXIT: Leave program
+
+Input value(s) out of range.
+Input value(s) out of range.
+Data point is of the wrong data type. Please enter an integer or decimal value.
+Show amount: 7
+Show minimum value: 1.000
+Show maximum value: 41.000
+Show amount: 18
+Show mean: 21.998
+Show median: 9.300
+Show Mode(s): 7.000, 35.000
+Show values:
+1.0        5.0        9.0        34.0        54.7
+1.3        7.0        9.6        35.0        56.3
+4.0        7.0        23.0        35.0        78.5
+4.3        8.0        23.2
+Show graph:
+0.00
+      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+8.00
+      XXXXXXXXXXXX
+16.00
+      XXXXXXXXXXXX
+24.00
+
+32.00
+      XXXXXXXXXXXXXXXXX
+40.00
+
+48.00
+      XXXXXX
+56.00
+      XXXXXX
+64.00
+
+72.00
+      XXXXXX
+80.00
+The average grade for the 0% to 10% range is 1.00
+The average grade for the 10% to 20% range is 1.30
+The average grade for the 20% to 30% range is 4.00
+The average grade for the 30% to 40% range is 4.34
+The average grade for the 40% to 50% range is 5.00
+The average grade for the 50% to 60% range is 7.00
+The average grade for the 60% to 70% range is 7.00
+The average grade for the 70% to 80% range is 8.00
+The average grade for the 80% to 90% range is 9.00
+The average grade for the 90% to 100% range is 9.60
+Show amount: 21
+Show minimum value: 1.000
+Show maximum value: 78.500
+Show mean: 19.713
+Show median: 8.000
+Show Mode(s): 7.000
+Show amount: 18
+Show minimum value: 1.000
+Show maximum value: 78.500
+Show mean: 21.998
+Show median: 9.300
+Show Mode(s): 7.000, 35.000

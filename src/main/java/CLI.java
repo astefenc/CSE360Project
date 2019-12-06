@@ -220,6 +220,7 @@ public class CLI {
             // load file
             gradeAnalyzer.loadFile(this.filepathField);
             recordAction(String.format("Load file: %s\n",this.filepathField));
+            this.errorState = false;
         } catch (Exception e){
             recordAction(String.format("Fail to load file: %s\n",this.filepathField));
             showError(e);  // show any exceptions that occur
@@ -237,6 +238,7 @@ public class CLI {
             // load file
             gradeAnalyzer.loadFile(this.filepathField);
             recordAction(String.format("Append file: %s\n",this.filepathField));
+            this.errorState = false;
         } catch (Exception e){
             recordAction(String.format("Fail to append file: %s\n",this.filepathField));
             showError(e);  // show any exceptions that occur

@@ -1,0 +1,16 @@
+SET_BOUNDARIES -4 -20
+ADD_VALUE 120
+SET_BOUNDARIES -50 50
+ADD_VALUE -2
+ADD_VALUE 4.4
+APPEND_FILE /home/thomas/Programs/java/CSE360/GradeAnalyzer/src/test/resources/testValues3.csvr
+APPEND_FILE /home/thomas/Programs/java/CSE360/GradeAnalyzer/src/test/resources/realFileWrongType.txc
+APPEND_FILE /home/thomas/Programs/java/CSE360/GradeAnalyzer/src/test/resources/testValues3.csv
+SET_COUNT 1
+SET_MINIMUM 1
+SET_MAXIMUM 1
+SET_MEAN 1
+SET_MEDIAN 1
+SET_MODE 1
+ANALYZE
+EXIT

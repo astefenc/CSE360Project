@@ -185,6 +185,7 @@ public class Controller {
             this.errorDisplayWrapper.setMinHeight(0);
             this.errorDisplayWrapper.setPrefHeight(0);
             this.errorDisplayWrapper.setMaxHeight(0);
+            this.errorState = false;
 
             // load file
             gradeAnalyzer.loadFile(this.filepathField.getText());
@@ -209,6 +210,7 @@ public class Controller {
             this.errorDisplayWrapper.setMinHeight(0);
             this.errorDisplayWrapper.setPrefHeight(0);
             this.errorDisplayWrapper.setMaxHeight(0);
+            this.errorState = false;
 
             // load file
             gradeAnalyzer.loadFile(this.filepathField.getText());
