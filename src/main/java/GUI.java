@@ -21,12 +21,6 @@ public class GUI extends Application {
         primaryStage.setScene(new Scene(parent, 1600, 900));
         primaryStage.setTitle("Grade Analyzer");
         primaryStage.show();
-
-/*
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.showOpenDialog(primaryStage);
-*/
     }
 
 }
