@@ -164,7 +164,9 @@ public class Controller {
 
         file = fileChooser.showOpenDialog(filepathField.getScene().getWindow()); // let user select file
 
-        this.filepathField.setText(file.toString()); // change text field to reflect selected file
+        try{
+            this.filepathField.setText(file.toString()); // change text field to reflect selected file
+        }catch (NullPointerException ignored){}
     }
      /**
       * Load file in file input textbox
