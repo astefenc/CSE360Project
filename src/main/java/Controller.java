@@ -189,6 +189,8 @@ public class Controller {
             this.errorDisplayWrapper.setMaxHeight(0);
             this.errorState = false;
 
+            showNothing();
+
             // load file
             gradeAnalyzer.loadFile(this.filepathField.getText());
             recordAction(String.format("Load file: %s\n",this.filepathField.getText()));
@@ -206,7 +208,6 @@ public class Controller {
       * */
     @FXML
     public void appendFile(){
-        showNothing();
         try {
             // hide error display
             this.errorDisplayWrapper.setMinHeight(0);
@@ -218,6 +219,8 @@ public class Controller {
             gradeAnalyzer.loadFile(this.filepathField.getText());
             recordAction(String.format("Append file: %s\n",this.filepathField.getText()));
             errorState = false;
+
+            showNothing();
         } catch (Exception e){
             recordAction(String.format("Fail append file: %s\n",this.filepathField.getText()));
             showError(e);  // show any exceptions that occur
@@ -238,6 +241,15 @@ public class Controller {
         try {
             gradeAnalyzer.addValue(Double.parseDouble(singleValueField.getText())); // add this one value
             recordAction(String.format("Add data value: %s\n",singleValueField.getText()));
+
+
+            // hide error display
+            this.errorDisplayWrapper.setMinHeight(0);
+            this.errorDisplayWrapper.setPrefHeight(0);
+            this.errorDisplayWrapper.setMaxHeight(0);
+
+
+            showNothing();
             errorState=false;
         } catch (NumberFormatException e) { // wrong data type
             recordAction(String.format("Fail add data value: %s\n",singleValueField.getText()));
@@ -258,13 +270,21 @@ public class Controller {
         try {
             double toDelete = Double.parseDouble(singleValueField.getText());
 
-            if(!gradeAnalyzer.getValues().contains(toDelete)){
+            if(! gradeAnalyzer.getValues().contains(toDelete)){
                 recordAction(String.format("Fail delete data value: %s\n",singleValueField.getText()));
                 showError(new RuntimeException("Unable to delete data.")); // if it isn't a number
-                errorState=false;
             }else{
                 gradeAnalyzer.deleteValue(toDelete); // delete this one value
                 recordAction(String.format("Delete data value: %s\n",singleValueField.getText()));
+
+                // hide error display
+                this.errorDisplayWrapper.setMinHeight(0);
+                this.errorDisplayWrapper.setPrefHeight(0);
+                this.errorDisplayWrapper.setMaxHeight(0);
+                errorState=false;
+
+
+                showNothing();
             }
         } catch (NumberFormatException e) { // wrong data type
             recordAction(String.format("Fail delete data value: %s\n",singleValueField.getText()));
@@ -482,7 +502,7 @@ public class Controller {
 
             modeOutput = concat.substring(0, concat.length()-2);
         }catch(RuntimeException e){
-            if(e.getMessage().equals("No mode")) {
+            if(e.getMessage().equals("There is no mode.")) {
                 modeOutput = "No mode";
             }else{
                 showError(e);
@@ -671,12 +691,17 @@ public class Controller {
         Label currentLabel;
         StringBuilder allPercentiles = new StringBuilder();
 
-        for(int i=0; i<10; i++){
-            currentLabel = (Label) percentileVBox.getChildren().get(i);
-            currentLabel.setText(String.format("The average grade for the %d%% to %d%% range is %.2f",i*10,i*10+10,percentileGrades.get(i)));
+        if(gradeAnalyzer.getAmount()<10){
+            currentLabel = (Label) percentileVBox.getChildren().get(0);
+            currentLabel.setText("You need at least 10 values before calculating percentile grades.");
             allPercentiles.append(currentLabel.getText()).append("\n");
+        }else {
+            for (int i = 0; i < 10; i++) {
+                currentLabel = (Label) percentileVBox.getChildren().get(i);
+                currentLabel.setText(String.format("The average grade for the %d%% to %d%% range is %.2f", i * 10, i * 10 + 10, percentileGrades.get(i)));
+                allPercentiles.append(currentLabel.getText()).append("\n");
+            }
         }
-
         /* Record for log */
         recordAction(String.format("Show percentiles:\n%s", allPercentiles.toString()));
     }
