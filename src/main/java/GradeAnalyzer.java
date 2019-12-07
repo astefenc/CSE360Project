@@ -82,6 +82,18 @@ public class GradeAnalyzer {
             }
         }
 
+        // remove repeats
+        for(int i=0; i<modes.size(); i++){
+            for(int j=i; j<modes.size(); j++){
+                try{
+                    if(modes.get(i) == modes.get(j))
+                        modes.remove(j);
+                }catch (IndexOutOfBoundsException ignored){}
+            }
+        }
+        // sort ascending
+        modes.sort(Double::compareTo);
+
         if(modes.equals(null)) {
             throw new RuntimeException("There is no mode.");
         }else {

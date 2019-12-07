@@ -20,12 +20,13 @@ EXIT: Leave program
 
 Max must be greater than min for range
 Max must be greater than min for range
+Input value(s) out of range.
 File does not exist. You may have an invalid file path.
 Invalid file extension.
 Show amount: 16
 Show minimum value: -2.000
 Show maximum value: 32.000
-Show mean: 9.563
+Show mean: 9.433
 Show median: 5.800
 Show Mode(s): 23.000
 
