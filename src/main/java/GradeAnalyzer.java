@@ -2,9 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class GradeAnalyzer {
     private LinkedList<Double> values;
@@ -68,6 +66,7 @@ public class GradeAnalyzer {
 
     LinkedList<Double> getMode() throws RuntimeException{
         LinkedList<Double> modes = new LinkedList<Double>();
+        Set<Double> uniqueModes;
 
         int mostFreq = 0;
         for(Double value: this.values) {
@@ -82,19 +81,15 @@ public class GradeAnalyzer {
             }
         }
 
-        // remove repeats
-        for(int i=0; i<modes.size(); i++){
-            for(int j=i; j<modes.size(); j++){
-                try{
-                    if(modes.get(i) == modes.get(j))
-                        modes.remove(j);
-                }catch (IndexOutOfBoundsException ignored){}
-            }
-        }
+        // remove repears
+        uniqueModes = new HashSet<>(modes);
+        modes.clear();
+        modes.addAll(uniqueModes);
+
         // sort ascending
         modes.sort(Double::compareTo);
 
-        if(modes.equals(null)) {
+        if(mostFreq <= 1) {
             throw new RuntimeException("There is no mode.");
         }else {
             return modes;
