@@ -65,12 +65,6 @@ The average grade for the 60% to 70% range is 7.00
 The average grade for the 70% to 80% range is 8.00
 The average grade for the 80% to 90% range is 9.00
 The average grade for the 90% to 100% range is 9.60
-Show amount: 21
-Show minimum value: 1.000
-Show maximum value: 78.500
-Show mean: 19.713
-Show median: 8.000
-Show Mode(s): 7.000
 Show amount: 18
 Show minimum value: 1.000
 Show maximum value: 78.500
